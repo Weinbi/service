@@ -1,0 +1,102 @@
+import { Users, NotebookPen, House, Music, UserRoundSearch, FingerprintPattern, Scale, BadgeJapaneseYen, School, SquareLibrary, Palette, FilePen, CalendarOff, Coins, SquareSigma } from 'lucide-react';
+
+export const menuItemsData = [{
+  key: 'enroll',
+  label: '招生',
+  isTitle: true
+}, {
+  key: 'Starter',
+  label: 'Starter',
+  icon: House,
+  href: '/starter'
+}, {
+  key: 'TrialRecord',
+  label: '试听记录',
+  icon: Music,
+  href: '/trial-record'
+}, {
+  key: 'Contract',
+  label: '报名合同',
+  icon: FilePen,
+  href: '/contract'
+}, {
+  key: 'RefundRecord',
+  label: '退费记录',
+  icon: CalendarOff,
+  href: '/refund-record'
+}, {
+  key: 'Teaching',
+  label: '教学',
+  isTitle: true
+}, {
+  key: 'Assistant',
+  label: '上课助手',
+  icon: NotebookPen,
+  href: '/assistant'
+}, {
+  key: 'Academic',
+  label: '教务',
+  isTitle: true
+}, {
+  key: 'Student',
+  label: '学生管理',
+  icon: UserRoundSearch,
+  href: '/student'
+}, {
+  key: 'Class',
+  label: '班级管理',
+  icon: Palette,
+  href: '/class'
+}, {
+  key: 'Course',
+  label: '课程种类',
+  icon: SquareLibrary,
+  href: '/course'
+}, {
+  key: 'hr',
+  label: '人事',
+  isTitle: true
+}, {
+  key: 'User',
+  label: '用户管理',
+  icon: Users,
+  href: '/user'
+}, {
+  key: 'Role',
+  label: '角色管理',
+  icon: FingerprintPattern,
+  href: '/role'
+}, {
+  key: 'SalaryConfig',
+  label: '薪酬配置',
+  icon: Scale,
+  href: '/salary-config'
+}, {
+  key: 'Salary',
+  label: '工资结算',
+  icon: SquareSigma,
+  href: '/salary'
+}, {
+  key: 'Finance',
+  label: '财务',
+  isTitle: true
+}, {
+  key: 'Textbook',
+  label: '教材管理',
+  icon: Coins,
+  href: '/textbook'
+}, {
+  key: 'FinancialRecord',
+  label: '财务流水',
+  icon: BadgeJapaneseYen,
+  href: '/financial-record'
+}, {
+  key: 'Settings',
+  label: '设置',
+  isTitle: true
+}, {
+  key: 'Campus',
+  label: '校区管理',
+  icon: School,
+  href: '/campus'
+}];

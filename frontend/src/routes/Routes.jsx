@@ -1,0 +1,41 @@
+import { lazy } from 'react';
+
+//Pages
+const Starter = lazy(() => import('@/app/starter'));
+const Settings = lazy(() => import('@/app/settings'));
+const Role = lazy(() => import('@/app/role'));
+const User = lazy(() => import('@/app/user'));
+//auth
+const BasicLogin = lazy(() => import('@/app/basic-login'));
+const BasicRegister = lazy(() => import('@/app/basic-register'));
+//Other
+const Error404 = lazy(() => import('@/app/404'));
+
+export const layoutsRoutes = [{
+  path: '/',
+  element: <Starter />
+}, {
+  path: '/starter',
+  element: <Starter />
+}, {
+  path: '/settings',
+  element: <Settings />
+}, {
+  path: '/role',
+  element: <Role />
+}, {
+  path: '/user',
+  name: 'User',
+  element: <User />
+}];
+
+export const singlePageRoutes = [{
+  path: '/basic-login',
+  element: <BasicLogin />
+}, {
+  path: '/basic-register',
+  element: <BasicRegister />
+}, {
+  path: '/404',
+  element: <Error404 />
+}];

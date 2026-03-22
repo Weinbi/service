@@ -1,0 +1,24 @@
+/* 去掉浏览器打印自带的页眉（日期/标题）和页脚（网址/页码） */
+@page {
+  size: auto;
+  margin-bottom: 0mm; 
+}
+
+@media print {
+  aside.app-menu,
+  .app-header,
+  .footer {
+    @apply !hidden w-0;
+  }
+
+  .page-content,
+  .content,
+  body {
+    padding: 0;
+    margin: 0;
+  }
+
+  .card {
+    box-shadow: none;
+  }
+}
