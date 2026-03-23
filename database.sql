@@ -35,7 +35,8 @@ CREATE TABLE campuses (
     name VARCHAR(100) NOT NULL UNIQUE, -- 如：海淀校区
     address VARCHAR(255),
     status VARCHAR(50) DEFAULT '营业中', -- 营业中、已停业
-    refund_scheme JSON -- 退费方案：[{"name": "转账手续费", "reference_code": "contract_balance", "value": 0, "suffix": "%"}]
+    refund_scheme JSON, -- 退费方案：[{"name": "转账手续费", "reference_code": "contract_balance", "value": 0, "suffix": "%"}]
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 学生表

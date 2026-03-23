@@ -5,6 +5,7 @@ const Starter = lazy(() => import('@/app/starter'));
 const Settings = lazy(() => import('@/app/settings'));
 const Role = lazy(() => import('@/app/role'));
 const User = lazy(() => import('@/app/user'));
+const Campus = lazy(() => import('@/app/campus'));
 //auth
 const BasicLogin = lazy(() => import('@/app/basic-login'));
 const BasicRegister = lazy(() => import('@/app/basic-register'));
@@ -25,8 +26,10 @@ export const layoutsRoutes = [{
   element: <Role />
 }, {
   path: '/user',
-  name: 'User',
   element: <User />
+}, {
+  path: '/campus',
+  element: <Campus />
 }];
 
 export const singlePageRoutes = [{

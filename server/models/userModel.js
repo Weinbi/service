@@ -92,8 +92,11 @@ class UserModel {
     if (data.bank_account !== undefined) updateData.bank_account = data.bank_account;
     if (data.role_id !== undefined) updateData.role_id = data.role_id;
     if (data.status !== undefined) updateData.status = data.status;
-    if (data.join_date !== undefined) updateData.join_date = data.join_date;
-    if (data.resignation_date !== undefined) updateData.resignation_date = data.resignation_date;
+
+    // 核心修改：如果是空字符串，转换成 null 存入数据库
+    if (data.join_date !== undefined) updateData.join_date = data.join_date || null;
+    if (data.resignation_date !== undefined) updateData.resignation_date = data.resignation_date || null;
+
     if (data.avatar_url !== undefined) updateData.avatar_url = data.avatar_url;
 
     // 如果没有任何需要更新的字段，直接返回成功
