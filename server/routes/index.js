@@ -2,10 +2,10 @@ const Router = require('@koa/router');
 const AuthController = require('../controllers/authController');
 const authMiddleware = require('../middlewares/auth');
 const checkPermission = require('../middlewares/rbac');
+const StatisticController = require('../controllers/statisticController');
 const UserController = require('../controllers/userController');
 const CampusController = require('../controllers/campusController');
 const RoleController = require('../controllers/roleController');
-const SalaryConfigController = require('../controllers/salaryConfigController');
 const StudentController = require('../controllers/studentController');
 const CourseController = require('../controllers/courseController');
 const ClassController = require('../controllers/classController');
@@ -16,13 +16,7 @@ const FinancialRecordController = require('../controllers/financialRecordControl
 const router = new Router();
 
 // 示例 1: 查看文章 (所有登录且有 'article:read' 权限的用户)
-router.get('/api/articles',
-  authMiddleware,
-  checkPermission('article:read'),
-  async (ctx) => {
-    ctx.body = { message: '这是文章列表数据' };
-  }
-);
+router.get('/api/articles', authMiddleware, checkPermission('article:read'), async (ctx) => { ctx.body = { message: '这是文章列表数据' }; });
 
 // === 公开接口 ===
 router.post('/api/register', AuthController.register);
@@ -42,6 +36,10 @@ router.put('/api/users/:id', authMiddleware, UserController.update);
 router.delete('/api/users/:id', authMiddleware, UserController.remove);
 
 // === 校区管理接口 ===
+router.get('/api/statistics/codes', authMiddleware, StatisticController.codeList);
+router.get('/api/statistics/calculate', authMiddleware, StatisticController.calculateData);
+
+// === 校区管理接口 ===
 router.get('/api/campuses', authMiddleware, CampusController.list);
 router.post('/api/campuses', authMiddleware, CampusController.add);
 router.put('/api/campuses/:id', authMiddleware, CampusController.update);
@@ -55,12 +53,6 @@ router.get('/api/roles', authMiddleware, RoleController.list);
 router.post('/api/roles', authMiddleware, RoleController.add);
 router.put('/api/roles/:id', authMiddleware, RoleController.update);
 router.delete('/api/roles/:id', authMiddleware, RoleController.remove);
-
-// === 薪酬配置接口 ===
-router.get('/api/salary-configs', authMiddleware, SalaryConfigController.list);
-router.post('/api/salary-configs', authMiddleware, SalaryConfigController.add);
-router.put('/api/salary-configs/:id', authMiddleware, SalaryConfigController.update);
-router.delete('/api/salary-configs/:id', authMiddleware, SalaryConfigController.remove);
 
 // === 学生管理接口 ===
 router.get('/api/students', authMiddleware, StudentController.list);

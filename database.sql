@@ -35,7 +35,6 @@ CREATE TABLE campuses (
     name VARCHAR(100) NOT NULL UNIQUE, -- 如：海淀校区
     address VARCHAR(255),
     status VARCHAR(50) DEFAULT '营业中', -- 营业中、已停业
-    refund_scheme JSON, -- 退费方案：[{"name": "转账手续费", "reference_code": "contract_balance", "value": 0, "suffix": "%"}]
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -60,6 +59,7 @@ CREATE TABLE courses (
     discount_scheme JSON, -- 折扣方案：[{"name": "...", "value": 0, "suffix": "元\%", "condition": { "end_date": "2026-03-01", "min_hours": 40, "student_status": "新线索" }}]
     group_scheme JSON, -- 团购方案：[{"name": "线上团购\线下团购", "value": 0, "suffix": "元\%"}]
     performance_scheme JSON, -- 绩效方案：[{"name": "课程顾问提成", "role_id": 1, "value": 0, "suffix": "元\%"}]
+    refund_scheme JSON, -- 退费方案：[{"name": "转账手续费", "reference_code": "contract_balance", "value": 0, "suffix": "%"}]
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -105,10 +105,11 @@ CREATE TABLE contracts (
     consultant_id INT, -- 所属课程顾问ID
     campus_id INT,
     contract_date DATE,
-    status VARCHAR(50) DEFAULT '已签约', -- 合同状态: 已签约、已收款、已退费
-    payment_method VARCHAR(50), -- 收款方式
     remark TEXT,
     account_blance DECIMAL(10, 2) DEFAULT 0.00, -- 账户余额
+    status VARCHAR(50) DEFAULT '已签约', -- 合同状态: 已签约、已收款、已退费
+    payment_method VARCHAR(200), -- 收款方式
+    refund_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE RESTRICT
 );
@@ -219,24 +220,19 @@ CREATE TABLE trial_records (
 -- 退费记录表
 CREATE TABLE refunds (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    refund_no VARCHAR(50) NOT NULL UNIQUE,
-    campus_id INT NOT NULL, 
-    student_id INT NOT NULL,
-    contract_id INT NOT NULL, 
-    course_id INT NOT NULL, 
-    refund_amount DECIMAL(10, 2) NOT NULL, 
-    handling_fee DECIMAL(10, 2) DEFAULT 0.00, 
-    total_deducted_amount DECIMAL(10, 2) DEFAULT 0.00, 
-    hours_to_deduct INT NOT NULL, 
-    refund_method TINYINT, 
-    reason TEXT, 
+    contract_id INT NOT NULL,
+    refund_info JSON, -- 存储格式: [{"name": "转账手续费", "reference_code": "contract_balance", "value": 0, "suffix": "元/%"}]
+    refund_amount DECIMAL(10, 2) NOT NULL,
+    total_deducted_amount DECIMAL(10, 2) DEFAULT 0.00,
+    hours_to_deduct INT NOT NULL,
+    refund_method VARCHAR(200), -- 退款方式
+    reason TEXT,
     status VARCHAR(50) DEFAULT '待审核',
-    applicant_id INT, 
-    auditor_id INT,   
-    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-    audited_at DATETIME, 
-    paid_at DATETIME,    
-    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE RESTRICT,
+    applicant_id INT,
+    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    auditor_id INT,
+    audited_at TIMESTAMP,
+    paid_at DATETIME,
     FOREIGN KEY (contract_id) REFERENCES contracts(id)
 );
 

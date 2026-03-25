@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import axios from '@/utils/request';
 
 const CampusList = ({ refreshKey, onEdit, onDelete }) => {
@@ -28,13 +27,7 @@ const CampusList = ({ refreshKey, onEdit, onDelete }) => {
     <div className="card">
       <div className="card-header flex justify-between items-center">
         <h6 className="card-title">校区列表</h6>
-        <button
-          className="btn btn-sm bg-primary text-white flex items-center gap-1"
-          aria-haspopup="dialog"
-          aria-expanded="false"
-          aria-controls="campus-add-modal"
-          data-hs-overlay="#campus-add-modal"
-        >
+        <button className="btn btn-sm bg-primary text-white flex items-center gap-1" aria-haspopup="dialog" aria-expanded="false" aria-controls="campus-add-modal" data-hs-overlay="#campus-add-modal" >
           <Plus className="size-4" /> 添加校区
         </button>
       </div>
@@ -73,25 +66,11 @@ const CampusList = ({ refreshKey, onEdit, onDelete }) => {
                       </td>
                       <td className="px-3 py-3">
                         <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => onEdit(campus)}
-                            className="btn size-8 bg-default-200 hover:bg-primary/10 hover:text-primary text-default-600 flex items-center justify-center rounded"
-                            aria-haspopup="dialog"
-                            aria-expanded="false"
-                            aria-controls="campus-edit-modal"
-                            data-hs-overlay="#campus-edit-modal"
-                          >
+                          <button onClick={() => onEdit(campus)} className="btn size-8 bg-default-200 hover:bg-primary/10 hover:text-primary text-default-600 flex items-center justify-center rounded" aria-haspopup="dialog" aria-expanded="false" aria-controls="campus-edit-modal" data-hs-overlay="#campus-edit-modal" >
                             <Pencil className="size-4" />
                           </button>
 
-                          <button
-                            onClick={() => onDelete(campus)}
-                            className="btn size-8 bg-default-200 hover:bg-danger/10 hover:text-danger text-default-600 flex items-center justify-center rounded"
-                            aria-haspopup="dialog"
-                            aria-expanded="false"
-                            aria-controls="campus-delete-modal"
-                            data-hs-overlay="#campus-delete-modal"
-                          >
+                          <button onClick={() => onDelete(campus)} className="btn size-8 bg-default-200 hover:bg-danger/10 hover:text-danger text-default-600 flex items-center justify-center rounded" aria-haspopup="dialog" aria-expanded="false" aria-controls="campus-delete-modal" data-hs-overlay="#campus-delete-modal" >
                             <Trash2 className="size-4" />
                           </button>
                         </div>

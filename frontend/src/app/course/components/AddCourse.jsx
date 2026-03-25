@@ -1,0 +1,244 @@
+import { useState, useEffect, useRef } from 'react';
+import { X, Plus, Trash2 } from 'lucide-react';
+import { useForm, useFieldArray } from 'react-hook-form';
+import axios from '@/utils/request';
+
+const AddCourse = ({ onAddSuccess }) => {
+  const closeBtnRef = useRef(null);
+  const [textbooks, setTextbooks] = useState([]);
+  const { register, control, handleSubmit, reset, watch, formState: { errors } } = useForm({
+    defaultValues: {
+      textbook_config: [],
+      discount_scheme: [],
+      group_scheme: []
+    }
+  });
+
+  const { fields: textbookFields, append: appendTextbook, remove: removeTextbook } = useFieldArray({
+    control,
+    name: "textbook_config"
+  });
+
+  const { fields: discountFields, append: appendDiscount, remove: removeDiscount } = useFieldArray({
+    control,
+    name: "discount_scheme"
+  });
+
+  const { fields: groupFields, append: appendGroup, remove: removeGroup } = useFieldArray({
+    control,
+    name: "group_scheme"
+  });
+
+  useEffect(() => {
+    const fetchTextbooks = async () => {
+      try {
+        const res = await axios.get('/api/textbooks');
+        setTextbooks(res.data);
+      } catch (error) {
+        console.error('获取教材列表失败:', error);
+      }
+    };
+    fetchTextbooks();
+  }, []);
+
+  const onSubmit = async (data) => {
+    try {
+      await axios.post('/api/courses', data);
+      reset();
+      onAddSuccess();
+      closeBtnRef.current?.click();
+    } catch (error) {
+      alert('添加失败: ' + (error.response?.data?.message || error.message));
+    }
+  };
+
+  return (
+    <div id="course-add-modal" className="hs-overlay hidden size-full fixed top-0 start-0 z-80 overflow-x-hidden overflow-y-auto pointer-events-none">
+      <div className="hs-overlay-animation-target hs-overlay-open:scale-100 hs-overlay-open:opacity-100 scale-95 opacity-0 ease-in-out transition-all duration-200 sm:max-w-2xl sm:w-full m-3 sm:mx-auto min-h-[calc(100%-56px)] flex items-center">
+        <div className="w-full flex flex-col card border border-default-200 shadow-2xs rounded-xl pointer-events-auto bg-white max-h-[90vh]">
+          <div className="card-header flex justify-between items-center py-3 px-4 border-b shrink-0">
+            <h3 className="font-bold text-default-800 text-base">新增课程</h3>
+            <button type="button" ref={closeBtnRef} className="size-8 inline-flex justify-center items-center gap-x-2 rounded-full border border-transparent bg-gray-100 text-gray-800 hover:bg-gray-200" aria-label="Close" data-hs-overlay="#course-add-modal">
+              <X className="size-4" />
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="overflow-hidden flex flex-col">
+            <div className="p-4 overflow-y-auto grid gap-6">
+              {/* 基础信息 */}
+              <div className="grid gap-4">
+                <div>
+                  <label className="block mb-2 text-sm font-medium">课程名称 <span className="text-danger">*</span></label>
+                  <input
+                    type="text"
+                    placeholder="如：小学英语"
+                    className="form-input w-full border rounded p-2 text-sm"
+                    {...register("course_name", { required: "课程名称不能为空" })}
+                  />
+                  {errors.course_name && <span className="text-xs text-danger">{errors.course_name.message}</span>}
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block mb-2 text-sm font-medium">时长 (分钟) <span className="text-danger">*</span></label>
+                    <input
+                      type="number"
+                      placeholder="如: 45"
+                      className="form-input w-full border rounded p-2 text-sm"
+                      {...register("class_period", { required: "需填时长", valueAsNumber: true, min: 1 })}
+                    />
+                    {errors.class_period && <span className="text-xs text-danger">{errors.class_period.message}</span>}
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium">标准单价 (元) <span className="text-danger">*</span></label>
+                    <input
+                      type="number"
+                      step="0.01"
+                      placeholder="如: 120"
+                      className="form-input w-full border rounded p-2 text-sm"
+                      {...register("unit_price", { required: "需填单价", valueAsNumber: true, min: 0 })}
+                    />
+                    {errors.unit_price && <span className="text-xs text-danger">{errors.unit_price.message}</span>}
+                  </div>
+                </div>
+              </div>
+
+              {/* 教材配置 ... */}
+              <div className="border border-default-200 rounded-lg p-4 bg-gray-50/50">
+                <div className="flex justify-between items-center">
+                  <label className="text-sm font-bold text-gray-800">教材配置</label>
+                  <button type="button" onClick={() => appendTextbook({ textbook_id: ''})} className="btn btn-sm bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-1 text-xs py-1 px-2 rounded">
+                    <Plus className="size-3" /> 新增教材
+                  </button>
+                </div>
+                {textbookFields.map((item, index) => {
+                  const selectedId = watch(`textbook_config.${index}.textbook_id`);
+                  const selectedTb = textbooks.find(tb => tb.id === selectedId);
+
+                  return (
+                    <div key={item.id} className="flex items-center gap-3 my-2 bg-white p-2 rounded border border-default-100 shadow-sm">
+                      <div className="flex-1">
+                        <select
+                          className="form-input w-full border rounded px-2 text-sm"
+                          {...register(`textbook_config.${index}.textbook_id`, { valueAsNumber: true, required: true })}
+                        >
+                          <option value="">请选择教材</option>
+                          {textbooks.map(tb => (
+                            <option key={tb.id} value={tb.id}>{tb.book_name}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="w-20 text-sm font-medium text-gray-500 text-center">
+                        {selectedTb ? `￥${selectedTb.unit_price || 0}` : '-'}
+                      </div>
+
+                      <button type="button" onClick={() => removeTextbook(index)} className="text-danger hover:bg-danger/10 p-1 rounded">
+                        <Trash2 className="size-4" />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* 折扣方案 ... */}
+              <div className="border border-default-200 rounded-lg p-4 bg-gray-50/50">
+                <div className="flex justify-between items-center">
+                  <label className="text-sm font-bold text-gray-800">折扣方案</label>
+                  <button type="button" onClick={() => appendDiscount({ name: "", value: 0, suffix: "%", condition: { end_date: "", min_hours: 0, student_status: "新线索" } })} className="btn btn-sm bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-1 text-xs py-1 px-2 rounded">
+                    <Plus className="size-3" /> 新增折扣
+                  </button>
+                </div>
+                {discountFields.map((item, index) => (
+                  <div key={item.id} className="grid grid-cols-12 gap-3 my-3 bg-white p-3 rounded border border-default-100 shadow-sm relative pr-10">
+                    <div className="col-span-12 sm:col-span-6">
+                      <label className="text-xs text-gray-500 mb-1 block">方案名称</label>
+                      <input type="text" placeholder="如: 暑期连报8折" className="form-input w-full border rounded py-1 px-2 text-sm" {...register(`discount_scheme.${index}.name`)} />
+                    </div>
+                    <div className="col-span-12 sm:col-span-6">
+                      <label className="text-xs text-gray-500 mb-1 block">折扣值</label>
+                      <div className="flex">
+                        <input type="number" step="0.01" placeholder="值" className="form-input w-full border border-r-0 rounded-l py-1 px-2 text-sm focus:z-10" {...register(`discount_scheme.${index}.value`, { valueAsNumber: true })} />
+                        <select className="form-select border rounded-r px-2 text-sm bg-gray-50 focus:z-10 w-20 shrink-0" {...register(`discount_scheme.${index}.suffix`)}>
+                          <option value="%">%</option>
+                          <option value="元">元</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="col-span-12 sm:col-span-4">
+                      <label className="text-xs text-gray-500 mb-1 block">条件: 截止日期</label>
+                      <input type="date" className="form-input w-full border rounded py-1 px-2 text-sm" {...register(`discount_scheme.${index}.condition.end_date`)} />
+                    </div>
+                    <div className="col-span-6 sm:col-span-4">
+                      <label className="text-xs text-gray-500 mb-1 block">条件: 最低课时</label>
+                      <input type="number" placeholder="最低课时" className="form-input w-full border rounded py-1 px-2 text-sm" {...register(`discount_scheme.${index}.condition.min_hours`, { valueAsNumber: true })} />
+                    </div>
+                    <div className="col-span-6 sm:col-span-4">
+                      <label className="text-xs text-gray-500 mb-1 block">条件: 学生状态</label>
+                      <select
+                        className="form-input w-full border rounded px-2 text-sm"
+                        {...register(`discount_scheme.${index}.condition.student_status`)}
+                      >
+                        <option value="新线索">新线索</option>
+                        <option value="已试听">已试听</option>
+                        <option value="已转化">已转化</option>
+                      </select>
+                    </div>
+                    <button type="button" onClick={() => removeDiscount(index)} className="absolute top-1/2 -translate-y-1/2 right-3 text-danger hover:bg-danger/10 p-1 rounded">
+                      <Trash2 className="size-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* 团购方案 (新增) */}
+              <div className="border border-default-200 rounded-lg p-4 bg-gray-50/50">
+                <div className="flex justify-between items-center">
+                  <label className="text-sm font-bold text-gray-800">团购方案</label>
+                  <button type="button" onClick={() => appendGroup({ name: "线上团购", value: 0, suffix: "%" })} className="btn btn-sm bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-1 text-xs py-1 px-2 rounded">
+                    <Plus className="size-3" /> 新增团购
+                  </button>
+                </div>
+                {groupFields.map((item, index) => (
+                  <div key={item.id} className="grid grid-cols-12 gap-3 my-3 bg-white p-3 rounded border border-default-100 shadow-sm relative pr-10">
+                    <div className="col-span-12 sm:col-span-6">
+                      <label className="text-xs text-gray-500 mb-1 block">团购类型</label>
+                      <select className="form-input w-full border rounded px-2 text-sm" {...register(`group_scheme.${index}.name`)}>
+                        <option value="线上团购">线上团购</option>
+                        <option value="线下团购">线下团购</option>
+                      </select>
+                    </div>
+                    <div className="col-span-12 sm:col-span-6">
+                      <label className="text-xs text-gray-500 mb-1 block">折扣值</label>
+                      <div className="flex">
+                        <input type="number" step="0.01" placeholder="值" className="form-input w-full border border-r-0 rounded-l py-1 px-2 text-sm focus:z-10" {...register(`group_scheme.${index}.value`, { valueAsNumber: true })} />
+                        <select className="form-select border rounded-r px-2 text-sm bg-gray-50 focus:z-10 w-20 shrink-0" {...register(`group_scheme.${index}.suffix`)}>
+                          <option value="%">%</option>
+                          <option value="元">元</option>
+                        </select>
+                      </div>
+                    </div>
+                    <button type="button" onClick={() => removeGroup(index)} className="absolute top-1/2 -translate-y-1/2 right-3 text-danger hover:bg-danger/10 p-1 rounded">
+                      <Trash2 className="size-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+
+            <div className="card-footer flex justify-end items-center gap-x-2 py-3 px-4 shrink-0">
+              <button type="button" className="btn bg-transparent text-danger hover:bg-danger/10" data-hs-overlay="#course-add-modal">
+                取消
+              </button>
+              <button type="submit" className="btn bg-primary text-white hover:bg-primary-600">
+                确认添加
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AddCourse;
