@@ -1,35 +1,31 @@
 const StatisticService = require('../services/statisticService.js');
 
-// 将原配置合并至此，供 listCodes 接口直接返回给前端渲染下拉框
-const ReferenceCodes = [
+const ReferenceDict = [
     {
         code: "teacher_consumed_value",
         name: "教师月度课消总额",
-        category: "salary",
-        description: "统计某教师在特定月份内，所有班级上课产生的课消总额"
+        category: "salary"
     },
     {
         code: "consultant_sales_amount",
         name: "顾问月度签约总额",
-        category: "salary",
-        description: "统计某课程顾问在特定月份内，名下所有生效合同的实付总额"
+        category: "salary"
     },
     {
         code: "contract_balance",
         name: "合同账户余额",
-        category: "refund",
-        description: "获取特定合同当前的账户可用余额"
+        category: "refund"
     }
 ];
 
 class StatisticController {
 
-    // [GET] /api/statistics/codes -> 前端获取下拉列表字典
-    static async codeList(ctx) {
+    // [GET] /api/statistics/referenceDict -> 前端获取下拉列表字典
+    static async referenceDict(ctx) {
         try {
             ctx.status = 200;
             // 直接返回当前文件内定义的数组
-            ctx.body = ReferenceCodes;
+            ctx.body = ReferenceDict;
         } catch (error) {
             ctx.status = 500;
             ctx.body = { error: 'INTERNAL_ERROR', message: error.message };

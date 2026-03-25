@@ -84,9 +84,9 @@ const EditRole = ({ role, onSuccess, permissionsMap, salarySchemesList, taxSchem
               {/* 薪酬方案 */}
               <div className="border border-default-200 p-3 rounded-lg">
                 <div className="flex justify-between items-center mb-2">
-                  <label className="block text-sm font-medium">薪酬方案</label>
-                  <button type="button" onClick={() => appendSalary({ type: '', name: '', reference_code: 'null', value: 0, suffix: '元' })} className="btn btn-xs bg-primary/10 text-primary">
-                    <Plus className="size-3 mr-1" /> 添加项
+                  <label className="text-sm font-bold text-gray-800">薪酬方案</label>
+                  <button type="button" onClick={() => appendSalary({ type: '', name: '', reference_code: 'null', value: 0, suffix: '元' })} className="btn btn-sm bg-primary/10 text-primary">
+                    <Plus className="size-3" /> 添加项
                   </button>
                 </div>
                 {salaryFields.map((field, index) => {
@@ -110,9 +110,9 @@ const EditRole = ({ role, onSuccess, permissionsMap, salarySchemesList, taxSchem
               {/* 税务方案 */}
               <div className="border border-default-200 p-3 rounded-lg">
                 <div className="flex justify-between items-center mb-2">
-                  <label className="block text-sm font-medium">税务与社保方案</label>
-                  <button type="button" onClick={() => appendTax({ type: '', name: '', reference_code: 'gross_salary', value: 0, suffix: '%' })} className="btn btn-xs bg-primary/10 text-primary">
-                    <Plus className="size-3 mr-1" /> 添加项
+                  <label className="text-sm font-bold text-gray-800">税务与社保方案</label>
+                  <button type="button" onClick={() => appendTax({ type: '', name: '', reference_code: 'gross_salary', value: 0, suffix: '%' })} className="btn btn-sm bg-primary/10 text-primary">
+                    <Plus className="size-3" /> 添加项
                   </button>
                 </div>
                 {taxFields.map((field, index) => {

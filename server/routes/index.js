@@ -36,7 +36,7 @@ router.put('/api/users/:id', authMiddleware, UserController.update);
 router.delete('/api/users/:id', authMiddleware, UserController.remove);
 
 // === 校区管理接口 ===
-router.get('/api/statistics/codes', authMiddleware, StatisticController.codeList);
+router.get('/api/statistics/referenceDict', authMiddleware, StatisticController.referenceDict);
 router.get('/api/statistics/calculate', authMiddleware, StatisticController.calculateData);
 
 // === 校区管理接口 ===
