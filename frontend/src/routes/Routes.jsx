@@ -6,8 +6,10 @@ const Settings = lazy(() => import('@/app/settings'));
 const Role = lazy(() => import('@/app/role'));
 const User = lazy(() => import('@/app/user'));
 const Campus = lazy(() => import('@/app/campus'));
-const Course = lazy(() => import('@/app/course'));
 const Student = lazy(() => import('@/app/student'));
+const Textbook = lazy(() => import('@/app/textbook'));
+const Course = lazy(() => import('@/app/course'));
+
 //auth
 const BasicLogin = lazy(() => import('@/app/basic-login'));
 const BasicRegister = lazy(() => import('@/app/basic-register'));
@@ -33,11 +35,14 @@ export const layoutsRoutes = [{
   path: '/campus',
   element: <Campus />
 }, {
-  path: '/course',
-  element: <Course />
-}, {
   path: '/student',
   element: <Student />
+}, {
+  path: '/textbook',
+  element: <Textbook />
+}, {
+  path: '/course',
+  element: <Course />
 }];
 
 export const singlePageRoutes = [{

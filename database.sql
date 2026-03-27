@@ -49,6 +49,17 @@ CREATE TABLE students (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- 教材表
+CREATE TABLE textbooks (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    book_name VARCHAR(100) NOT NULL UNIQUE,
+    reserved_quantity INT DEFAULT 0, -- 合同已定但未领取的数量
+    stock INT DEFAULT 0, -- 实物总库存
+    unit_price DECIMAL(10, 2),
+    campus_id INT,
+    distribution_records JSON -- 存储结构 [{"operator_id": 1, "real_name": "操作员", "type": "教材领取", "student_info": [], "quantity": 1, "created_at": "2026-03-01"}]
+);
+
 -- 课程种类(模板)
 CREATE TABLE courses (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -58,7 +69,7 @@ CREATE TABLE courses (
     textbook_config JSON, -- 教材配置：[{"textbook_id": 101}]
     discount_scheme JSON, -- 折扣方案：[{"name": "...", "value": 0, "suffix": "元\%", "condition": { "end_date": "2026-03-01", "min_hours": 40, "student_status": "新线索" }}]
     group_scheme JSON, -- 团购方案：[{"name": "线上团购\线下团购", "value": 0, "suffix": "元\%"}]
-    performance_scheme JSON, -- 绩效方案：[{"name": "课程顾问提成", "role_id": 1, "value": 0, "suffix": "元\%"}]
+    performance_scheme JSON, -- 绩效方案：[{"type": "新生成交\老生续费\课时消耗\退费扣除", "name": "教师课时费", "role_name": "教师\课程顾问", "value": 0, "suffix": "元\%"}]
     refund_scheme JSON, -- 退费方案：[{"name": "转账手续费", "reference_code": "contract_balance", "value": 0, "suffix": "%"}]
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -77,17 +88,6 @@ CREATE TABLE classes (
     FOREIGN KEY (course_id) REFERENCES courses(id),
     FOREIGN KEY (teacher_id) REFERENCES users(id) ON DELETE RESTRICT,
     FOREIGN KEY (campus_id) REFERENCES campuses(id) ON DELETE RESTRICT
-);
-
--- 教材表
-CREATE TABLE textbooks (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    book_name VARCHAR(100) NOT NULL UNIQUE,
-    reserved_quantity INT DEFAULT 0, -- 合同已定但未领取的数量
-    stock INT DEFAULT 0, -- 实物总库存
-    unit_price DECIMAL(10, 2),
-    campus_id INT,
-    distribution_records JSON -- 存储结构 [{"operator_id": 1, "real_name": "操作员", "type": "教材领取", "student_info": [], "quantity": 1, "created_at": "2026-03-01"}]
 );
 
 -- 报名合同表 (记录资金流入)
@@ -134,7 +134,7 @@ CREATE TABLE performance_records (
     id INT PRIMARY KEY AUTO_INCREMENT,
     campus_id INT NOT NULL,
     user_id INT NOT NULL, -- 关联人ID (顾问或教师)
-    perf_type varchar(50) NOT NULL, -- 绩效类型: '销售提成', '课酬绩效', '退费扣除'
+    perf_type varchar(50) NOT NULL, -- 绩效类型: '新生成交', '老生续费', '课时消耗', '退费扣除'
     amount DECIMAL(10, 2) NOT NULL, -- 绩效金额 (正数为增加，负数为扣除)
     
     -- === 业务关联 ===
@@ -142,7 +142,7 @@ CREATE TABLE performance_records (
     attendance_id INT,
     refund_id INT,
   
-    calc_snapshot JSON NOT NULL, -- 计算逻辑快照: 示例: {"name": "课程顾问提成", "value": 0, "suffix": "元\%", "base_amount": 10000} 
+    calc_snapshot JSON NOT NULL, -- 计算逻辑快照: 示例: {"name": "课程顾问提成", "value": 0, "suffix": "元\%"} 
     settlement_id INT DEFAULT NULL, -- 关联的薪酬结算单ID (已结算则不为NULL)
     status varchar(20) DEFAULT '待结算', -- 绩效记录状态: '待结算', '已结算'
     remark TEXT,

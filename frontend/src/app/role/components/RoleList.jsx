@@ -47,7 +47,7 @@ const RoleList = ({ roles, onSelectRole }) => {
                             <SquarePen className="size-4" />
                           </button>
                           <button 
-                            className="flex size-8 bg-default-200 rounded-md items-center justify-center hover:bg-primary/10 hover:text-primary transition-all text-default-600 text-danger"
+                            className="flex size-8 bg-default-200 rounded-md items-center justify-center hover:bg-primary/10 hover:text-danger transition-all text-default-600 text-danger"
                             onClick={() => onSelectRole(role)}
                             data-hs-overlay="#role-delete-modal"
                           >

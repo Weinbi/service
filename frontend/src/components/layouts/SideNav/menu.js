@@ -67,11 +67,6 @@ export const menuItemsData = [{
   icon: FingerprintPattern,
   href: '/role'
 }, {
-  key: 'SalaryConfig',
-  label: '薪酬配置',
-  icon: Scale,
-  href: '/salary-config'
-}, {
   key: 'Salary',
   label: '工资结算',
   icon: SquareSigma,

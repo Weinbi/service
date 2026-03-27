@@ -6,11 +6,14 @@ import axios from '@/utils/request';
 const EditCourse = ({ course, onUpdateSuccess }) => {
   const closeBtnRef = useRef(null);
   const [textbooks, setTextbooks] = useState([]);
+  const [refundRefs, setRefundRefs] = useState([]);
+  
   const { register, control, handleSubmit, reset, watch, formState: { errors } } = useForm({
     defaultValues: {
       textbook_config: [],
       discount_scheme: [],
-      group_scheme: []
+      group_scheme: [],
+      refund_scheme: []
     }
   });
 
@@ -23,17 +26,24 @@ const EditCourse = ({ course, onUpdateSuccess }) => {
   const { fields: groupFields, append: appendGroup, remove: removeGroup } = useFieldArray({
     control, name: "group_scheme"
   });
+  const { fields: refundFields, append: appendRefund, remove: removeRefund } = useFieldArray({
+    control, name: "refund_scheme"
+  });
 
   useEffect(() => {
-    const fetchTextbooks = async () => {
+    const fetchInitialData = async () => {
       try {
-        const res = await axios.get('/api/textbooks');
-        setTextbooks(res.data);
+        const [textbooksRes, refsRes] = await Promise.all([
+          axios.get('/api/textbooks'),
+          axios.get('/api/statistics/referenceDict').catch(() => ({ data: [] }))
+        ]);
+        setTextbooks(textbooksRes.data);
+        setRefundRefs((refsRes.data || []).filter(item => item.category === 'refund'));
       } catch (error) {
-        console.error('获取教材列表失败:', error);
+        console.error('获取初始数据失败:', error);
       }
     };
-    fetchTextbooks();
+    fetchInitialData();
   }, []);
 
   useEffect(() => {
@@ -53,13 +63,19 @@ const EditCourse = ({ course, onUpdateSuccess }) => {
         try { gScheme = JSON.parse(gScheme); } catch (e) { gScheme = []; }
       }
 
+      let rScheme = course.refund_scheme || [];
+      if (typeof rScheme === 'string') {
+        try { rScheme = JSON.parse(rScheme); } catch (e) { rScheme = []; }
+      }
+
       reset({
         course_name: course.course_name,
         class_period: course.class_period,
         unit_price: course.unit_price,
         textbook_config: tConfig,
         discount_scheme: dScheme,
-        group_scheme: gScheme
+        group_scheme: gScheme,
+        refund_scheme: rScheme // 回显退费方案
       });
     }
   }, [course, reset]);
@@ -245,6 +261,47 @@ const EditCourse = ({ course, onUpdateSuccess }) => {
                   </div>
                 ))}
               </div>
+
+              {/* 退费方案 */}
+              <div className="border border-default-200 rounded-lg p-4 bg-gray-50/50">
+                <div className="flex justify-between items-center">
+                  <label className="text-sm font-bold text-gray-800">退费方案</label>
+                  <button type="button" onClick={() => appendRefund({ name: "", reference_code: "", value: 0, suffix: "%" })} className="btn btn-sm bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-1 text-xs py-1 px-2 rounded">
+                    <Plus className="size-3" /> 新增退费方案
+                  </button>
+                </div>
+                {refundFields.map((item, index) => (
+                  <div key={item.id} className="grid grid-cols-12 gap-3 my-3 bg-white p-3 rounded border border-default-100 shadow-sm relative pr-10">
+                    <div className="col-span-12 sm:col-span-4">
+                      <label className="text-xs text-gray-500 mb-1 block">方案名称</label>
+                      <input type="text" placeholder="如: 转账手续费" className="form-input w-full border rounded py-1 px-2 text-sm" {...register(`refund_scheme.${index}.name`)} />
+                    </div>
+                    <div className="col-span-12 sm:col-span-4">
+                      <label className="text-xs text-gray-500 mb-1 block">扣费基数</label>
+                      <select className="form-input w-full border rounded px-2 text-sm" {...register(`refund_scheme.${index}.reference_code`)}>
+                        <option value="">空</option>
+                        {refundRefs.map(ref => (
+                          <option key={ref.code} value={ref.code}>{ref.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="col-span-12 sm:col-span-4">
+                      <label className="text-xs text-gray-500 mb-1 block">扣费值</label>
+                      <div className="flex">
+                        <input type="number" step="0.01" className="form-input w-full border border-r-0 rounded-l py-1 px-2 text-sm focus:z-10" {...register(`refund_scheme.${index}.value`, { valueAsNumber: true })} />
+                        <select className="form-select border rounded-r px-2 text-sm bg-gray-50 focus:z-10 w-20 shrink-0" {...register(`refund_scheme.${index}.suffix`)}>
+                          <option value="%">%</option>
+                          <option value="元">元</option>
+                        </select>
+                      </div>
+                    </div>
+                    <button type="button" onClick={() => removeRefund(index)} className="absolute top-1/2 -translate-y-1/2 right-3 text-danger hover:bg-danger/10 p-1 rounded">
+                      <Trash2 className="size-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
             </div>
 
             <div className="card-footer flex justify-end items-center gap-x-2 py-3 px-4 shrink-0">
