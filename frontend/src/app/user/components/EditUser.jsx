@@ -52,7 +52,7 @@ const EditUser = ({ user, onUpdateSuccess }) => {
       onUpdateSuccess();
       closeBtnRef.current?.click();
     } catch (error) {
-      showAlert(error.response?.data?.message || error.message || '更新失败', 'danger');
+      showAlert(error.response?.data?.message || '更新失败', 'danger');
     }
   };
 

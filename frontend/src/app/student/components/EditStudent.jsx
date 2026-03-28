@@ -2,14 +2,15 @@ import { useEffect, useRef } from 'react';
 import axios from '@/utils/request';
 import { X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { showAlert } from '@/components/Alert';
 
 const EditStudent = ({ student, onUpdateSuccess }) => {
   const closeBtnRef = useRef(null);
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: {
-      name: '', 
-      parent_phone: '', 
+      name: '',
+      parent_phone: '',
       status: '新线索'
     }
   });
@@ -29,9 +30,10 @@ const EditStudent = ({ student, onUpdateSuccess }) => {
     try {
       await axios.put(`/api/students/${student.id}`, data);
       onUpdateSuccess();
-      closeBtnRef.current?.click(); 
+      closeBtnRef.current?.click();
+      showAlert('更新成功', 'success');
     } catch (error) {
-      alert('更新失败: ' + (error.response?.data?.error || error.message));
+      showAlert(error.response?.data?.message || '更新失败', 'warning');
     }
   };
 

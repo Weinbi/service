@@ -2,6 +2,7 @@ import deleteImg from '@/assets/images/delete.png';
 import { X } from 'lucide-react';
 import axios from '@/utils/request';
 import { useRef, useState } from 'react';
+import { showAlert } from '@/components/Alert';
 
 const DeleteModal = ({ campusData, onSuccess }) => {
   const closeBtnRef = useRef(null);
@@ -14,8 +15,9 @@ const DeleteModal = ({ campusData, onSuccess }) => {
       await axios.delete(`/api/campuses/${campusData.id}`);
       onSuccess();
       closeBtnRef.current?.click();
+      showAlert('删除成功', 'success');
     } catch (error) {
-      alert(error.response?.data?.message || '删除失败');
+      showAlert(error.response?.data?.message || '删除失败', 'warning');
     } finally {
       setLoading(false);
     }

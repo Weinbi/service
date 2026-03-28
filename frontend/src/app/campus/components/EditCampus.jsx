@@ -2,6 +2,7 @@ import { X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import axios from '@/utils/request';
 import { useEffect, useRef } from 'react';
+import { showAlert } from '@/components/Alert';
 
 const EditCampus = ({ campusData, onSuccess }) => {
   const closeBtnRef = useRef(null);
@@ -22,8 +23,9 @@ const EditCampus = ({ campusData, onSuccess }) => {
       await axios.put(`/api/campuses/${campusData.id}`, data);
       onSuccess();
       closeBtnRef.current?.click();
+      showAlert('更新成功', 'success');
     } catch (error) {
-      alert(error.response?.data?.message || '更新失败');
+      showAlert(error.response?.data?.message || '更新失败', 'warning');
     }
   };
 
@@ -46,10 +48,10 @@ const EditCampus = ({ campusData, onSuccess }) => {
               <div className="flex flex-col gap-y-4">
                 <div className="lg:col-span-12">
                   <label htmlFor="edit_name" className="inline-block mb-2 text-base font-medium">校区名称</label>
-                  <input 
-                    type="text" 
-                    id="edit_name" 
-                    className="form-input" 
+                  <input
+                    type="text"
+                    id="edit_name"
+                    className="form-input"
                     {...register("name", { required: "校区名称必填" })}
                   />
                   {errors.name && <span className="text-red-500 text-sm">{errors.name.message}</span>}
@@ -57,10 +59,10 @@ const EditCampus = ({ campusData, onSuccess }) => {
 
                 <div className="lg:col-span-12">
                   <label htmlFor="edit_address" className="inline-block mb-2 text-base font-medium">地址</label>
-                  <input 
-                    type="text" 
-                    id="edit_address" 
-                    className="form-input" 
+                  <input
+                    type="text"
+                    id="edit_address"
+                    className="form-input"
                     {...register("address")}
                   />
                 </div>
@@ -68,7 +70,7 @@ const EditCampus = ({ campusData, onSuccess }) => {
                 <div className="lg:col-span-12">
                   <label htmlFor="edit_status" className="inline-block mb-2 text-sm text-default-800 font-medium">状态</label>
                   <select id="edit_status" className="form-input" {...register("status")}>
-                     <option value="营业中">营业中</option>
+                    <option value="营业中">营业中</option>
                     <option value="已停业">已停业</option>
                   </select>
                 </div>

@@ -17,7 +17,9 @@ class CourseModel {
       unit_price,
       textbook_config = [],
       discount_scheme = [],
-      group_scheme = [] // 接收团购数据
+      group_scheme = [],
+      performance_scheme = [],
+      refund_scheme = []
     } = data;
 
     const [insertId] = await db('courses').insert({
@@ -26,7 +28,9 @@ class CourseModel {
       unit_price,
       textbook_config: JSON.stringify(textbook_config),
       discount_scheme: JSON.stringify(discount_scheme),
-      group_scheme: JSON.stringify(group_scheme) // 序列化存入
+      group_scheme: JSON.stringify(group_scheme),
+      performance_scheme: JSON.stringify(performance_scheme),
+      refund_scheme: JSON.stringify(refund_scheme),
     });
 
     return insertId;
@@ -39,7 +43,9 @@ class CourseModel {
       unit_price,
       textbook_config = [],
       discount_scheme = [],
-      group_scheme = [] // 接收团购数据
+      group_scheme = [],
+      performance_scheme = [],
+      refund_scheme = []
     } = data;
 
     const affectedRows = await db('courses')
@@ -50,7 +56,9 @@ class CourseModel {
         unit_price,
         textbook_config: JSON.stringify(textbook_config),
         discount_scheme: JSON.stringify(discount_scheme),
-        group_scheme: JSON.stringify(group_scheme) // 序列化更新
+        group_scheme: JSON.stringify(group_scheme),
+        performance_scheme: JSON.stringify(performance_scheme),
+        refund_scheme: JSON.stringify(refund_scheme)
       });
 
     return affectedRows;

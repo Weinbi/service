@@ -69,7 +69,7 @@ CREATE TABLE courses (
     textbook_config JSON, -- 教材配置：[{"textbook_id": 101}]
     discount_scheme JSON, -- 折扣方案：[{"name": "...", "value": 0, "suffix": "元\%", "condition": { "end_date": "2026-03-01", "min_hours": 40, "student_status": "新线索" }}]
     group_scheme JSON, -- 团购方案：[{"name": "线上团购\线下团购", "value": 0, "suffix": "元\%"}]
-    performance_scheme JSON, -- 绩效方案：[{"type": "新生成交\老生续费\课时消耗\退费扣除", "name": "教师课时费", "role_name": "教师\课程顾问", "value": 0, "suffix": "元\%"}]
+    performance_scheme JSON, -- 绩效方案：[{"type": "新生成交\老生续费\课时消耗\退费扣除", "role_name": "教师\课程顾问", "value": 0, "suffix": "元\%"}]
     refund_scheme JSON, -- 退费方案：[{"name": "转账手续费", "reference_code": "contract_balance", "value": 0, "suffix": "%"}]
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -108,7 +108,7 @@ CREATE TABLE contracts (
     remark TEXT,
     account_blance DECIMAL(10, 2) DEFAULT 0.00, -- 账户余额
     status VARCHAR(50) DEFAULT '已签约', -- 合同状态: 已签约、已收款、已退费
-    payment_method VARCHAR(200), -- 收款方式
+    payment_method VARCHAR(200), -- 支付方式
     refund_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE RESTRICT
@@ -122,11 +122,12 @@ CREATE TABLE financial_records (
     trade_type VARCHAR(50) NOT NULL, -- 收入、支出、退费
     category VARCHAR(50) NOT NULL, -- 学费、教材费、薪资、房租、水费、电费、其他
     amount DECIMAL(12, 2) NOT NULL,
+    payment_method VARCHAR(200), -- 支付方式
+    operator_id INT,
     contract_id INT,
     refund_id INT,
-    transaction_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    operator_id INT,
-    remark TEXT
+    remark TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 -- 绩效记录表
@@ -225,7 +226,7 @@ CREATE TABLE refunds (
     refund_amount DECIMAL(10, 2) NOT NULL,
     total_deducted_amount DECIMAL(10, 2) DEFAULT 0.00,
     hours_to_deduct INT NOT NULL,
-    refund_method VARCHAR(200), -- 退款方式
+    payment_method VARCHAR(200), -- 支付方式
     reason TEXT,
     status VARCHAR(50) DEFAULT '待审核',
     applicant_id INT,

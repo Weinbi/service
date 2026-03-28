@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import axios from '@/utils/request';
 import { X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { showAlert } from '@/components/Alert';
 
 const AddStudent = ({ onAddSuccess }) => {
   const closeBtnRef = useRef(null);
@@ -21,8 +22,9 @@ const AddStudent = ({ onAddSuccess }) => {
       onAddSuccess(); 
       reset(); 
       closeBtnRef.current?.click(); 
+      showAlert('添加成功', 'success');
     } catch (error) {
-      alert('添加失败: ' + (error.response?.data?.error || error.message));
+      showAlert(error.response?.data?.message || '添加失败', 'warning');
     }
   };
 

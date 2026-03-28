@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import axios from '@/utils/request';
 import { X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { showAlert } from '@/components/Alert';
 
 const AddTextbook = ({ onAddSuccess }) => {
   const closeBtnRef = useRef(null);
@@ -33,9 +34,10 @@ const AddTextbook = ({ onAddSuccess }) => {
       await axios.post('/api/textbooks', data);
       onAddSuccess(); 
       reset(); 
-      closeBtnRef.current?.click(); 
+      closeBtnRef.current?.click();
+      showAlert('添加成功', 'success');
     } catch (error) {
-      alert('添加教材失败: ' + (error.response?.data?.message || error.message));
+      showAlert(error.response?.data?.message || '添加失败', 'warning');
     }
   };
 

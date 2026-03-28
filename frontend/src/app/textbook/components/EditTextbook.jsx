@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import axios from '@/utils/request';
 import { X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
+import { showAlert } from '@/components/Alert';
 
 const EditTextbook = ({ textbook, onUpdateSuccess }) => {
   const closeBtnRef = useRef(null);
@@ -24,9 +25,10 @@ const EditTextbook = ({ textbook, onUpdateSuccess }) => {
     try {
       await axios.put(`/api/textbooks/${textbook.id}`, data);
       onUpdateSuccess();
-      closeBtnRef.current?.click(); 
+      closeBtnRef.current?.click();
+      showAlert('更新成功', 'success');
     } catch (error) {
-      alert('更新失败: ' + (error.response?.data?.message || error.message));
+      showAlert(error.response?.data?.message || '更新失败', 'warning');
     }
   };
 
@@ -65,7 +67,7 @@ const EditTextbook = ({ textbook, onUpdateSuccess }) => {
                   />
                   {errors.unit_price && <span className="text-xs text-danger mt-1 block">{errors.unit_price.message}</span>}
                 </div>
-                
+
                 <p className="text-xs text-default-500">注：库存变动请通过业务操作(入库/发放)进行，在此不可直接修改。</p>
               </div>
             </div>

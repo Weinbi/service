@@ -19,6 +19,7 @@ const CourseList = ({ courses, onSelectCourse }) => {
                   <th className="px-3 py-3 text-start">课程名称</th>
                   <th className="px-3 py-3 text-start">每节时长(分钟)</th>
                   <th className="px-3 py-3 text-start">标准单价(元)</th>
+                  <th className="px-3 py-3 text-start">更新时间</th>
                   <th className="px-3 py-3 text-center">操作</th>
                 </tr>
               </thead>
@@ -30,6 +31,7 @@ const CourseList = ({ courses, onSelectCourse }) => {
                       <td className="px-3 py-3 text-sm font-medium">{item.course_name}</td>
                       <td className="px-3 py-3 text-sm">{item.class_period} 分钟</td>
                       <td className="px-3 py-3 text-sm text-primary font-medium">¥{item.unit_price}</td>
+                      <td className="px-3 py-3 text-sm">{item.updated_at}</td>
                       <td className="px-3 py-3">
                         <div className="flex items-center justify-center gap-2">
                           <button

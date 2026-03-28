@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import axios from '@/utils/request';
 import { X, AlertTriangle } from 'lucide-react';
+import { showAlert } from '@/components/Alert';
 
 const DeleteModal = ({ textbook, onDeleteSuccess }) => {
   const closeBtnRef = useRef(null);
@@ -11,8 +12,9 @@ const DeleteModal = ({ textbook, onDeleteSuccess }) => {
       await axios.delete(`/api/textbooks/${textbook.id}`);
       onDeleteSuccess();
       closeBtnRef.current?.click();
+      showAlert('删除成功', 'success');
     } catch (error) {
-      alert('删除失败: ' + (error.response?.data?.message || error.message));
+      showAlert(error.response?.data?.message || '删除失败', 'warning');
     }
   };
 
@@ -29,7 +31,7 @@ const DeleteModal = ({ textbook, onDeleteSuccess }) => {
               <X className="size-5" />
             </button>
           </div>
-          
+
           <div className="card-body p-4 text-center">
             <p className="text-default-600 mb-4">
               确定要删除教材 <strong>{textbook?.book_name}</strong> 吗？<br />

@@ -15,7 +15,7 @@ const UserDelete = ({ user, onDeleteSuccess }) => {
       onDeleteSuccess();
       closeBtnRef.current?.click();
     } catch (error) {
-      showAlert(error.response?.data?.message || error.message || '删除失败', 'danger');
+      showAlert(error.response?.data?.message || '删除失败', 'danger');
     }
   };
 

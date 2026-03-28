@@ -9,6 +9,8 @@ const Campus = lazy(() => import('@/app/campus'));
 const Student = lazy(() => import('@/app/student'));
 const Textbook = lazy(() => import('@/app/textbook'));
 const Course = lazy(() => import('@/app/course'));
+const Class = lazy(() => import('@/app/class'));
+const Contract = lazy(() => import('@/app/contract'));
 
 //auth
 const BasicLogin = lazy(() => import('@/app/basic-login'));
@@ -43,6 +45,12 @@ export const layoutsRoutes = [{
 }, {
   path: '/course',
   element: <Course />
+}, {
+  path: '/class',
+  element: <Class />
+}, {
+  path: '/contract',
+  element: <Contract />
 }];
 
 export const singlePageRoutes = [{

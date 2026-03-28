@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { X, Plus, Trash2 } from 'lucide-react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import axios from '@/utils/request';
+import { showAlert } from '@/components/Alert';
 
 const AddCourse = ({ onAddSuccess }) => {
   const closeBtnRef = useRef(null);
@@ -13,6 +14,7 @@ const AddCourse = ({ onAddSuccess }) => {
       textbook_config: [],
       discount_scheme: [],
       group_scheme: [],
+      performance_scheme: [],
       refund_scheme: []
     }
   });
@@ -30,6 +32,11 @@ const AddCourse = ({ onAddSuccess }) => {
   const { fields: groupFields, append: appendGroup, remove: removeGroup } = useFieldArray({
     control,
     name: "group_scheme"
+  });
+
+  const { fields: performanceFields, append: appendPerformance, remove: removePerformance } = useFieldArray({
+    control,
+    name: "performance_scheme"
   });
 
   const { fields: refundFields, append: appendRefund, remove: removeRefund } = useFieldArray({
@@ -60,8 +67,9 @@ const AddCourse = ({ onAddSuccess }) => {
       reset();
       onAddSuccess();
       closeBtnRef.current?.click();
+      showAlert('添加成功', 'success');
     } catch (error) {
-      alert('添加失败: ' + (error.response?.data?.message || error.message));
+      showAlert(error.response?.data?.message || '添加失败', 'warning');
     }
   };
 
@@ -120,7 +128,7 @@ const AddCourse = ({ onAddSuccess }) => {
               <div className="border border-default-200 rounded-lg p-4 bg-gray-50/50">
                 <div className="flex justify-between items-center">
                   <label className="text-sm font-bold text-gray-800">教材配置</label>
-                  <button type="button" onClick={() => appendTextbook({ textbook_id: ''})} className="btn btn-sm bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-1 text-xs py-1 px-2 rounded">
+                  <button type="button" onClick={() => appendTextbook({ textbook_id: '' })} className="btn btn-sm bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-1 text-xs py-1 px-2 rounded">
                     <Plus className="size-3" /> 新增教材
                   </button>
                 </div>
@@ -231,6 +239,49 @@ const AddCourse = ({ onAddSuccess }) => {
                       </div>
                     </div>
                     <button type="button" onClick={() => removeGroup(index)} className="absolute top-1/2 -translate-y-1/2 right-3 text-danger hover:bg-danger/10 p-1 rounded">
+                      <Trash2 className="size-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+
+              {/* 绩效方案 */}
+              <div className="border border-default-200 rounded-lg p-4 bg-gray-50/50">
+                <div className="flex justify-between items-center">
+                  <label className="text-sm font-bold text-gray-800">绩效方案</label>
+                  <button type="button" onClick={() => appendPerformance({ type: "新生成交", role_name: "教师", value: 0, suffix: "元" })} className="btn btn-sm bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-1 text-xs py-1 px-2 rounded">
+                    <Plus className="size-3" /> 新增绩效方案
+                  </button>
+                </div>
+                {performanceFields.map((item, index) => (
+                  <div key={item.id} className="grid grid-cols-12 gap-3 my-3 bg-white p-3 rounded border border-default-100 shadow-sm relative pr-10">
+                    <div className="col-span-12 sm:col-span-4">
+                      <label className="text-xs text-gray-500 mb-1 block">绩效类型</label>
+                      <select className="form-input w-full border rounded py-1 px-2 text-sm" {...register(`performance_scheme.${index}.type`)}>
+                        <option value="新生成交">新生成交</option>
+                        <option value="老生续费">老生续费</option>
+                        <option value="课时消耗">课时消耗</option>
+                        <option value="退费扣除">退费扣除</option>
+                      </select>
+                    </div>
+                    <div className="col-span-12 sm:col-span-4">
+                      <label className="text-xs text-gray-500 mb-1 block">适用角色</label>
+                      <select className="form-input w-full border rounded py-1 px-2 text-sm" {...register(`performance_scheme.${index}.role_name`)}>
+                        <option value="教师">教师</option>
+                        <option value="课程顾问">课程顾问</option>
+                      </select>
+                    </div>
+                    <div className="col-span-12 sm:col-span-4">
+                      <label className="text-xs text-gray-500 mb-1 block">绩效值</label>
+                      <div className="flex">
+                        <input type="number" step="0.01" placeholder="值" className="form-input w-full border border-r-0 rounded-l py-1 px-2 text-sm focus:z-10" {...register(`performance_scheme.${index}.value`, { valueAsNumber: true })} />
+                        <select className="form-select border rounded-r px-2 text-sm bg-gray-50 focus:z-10 w-20 shrink-0" {...register(`performance_scheme.${index}.suffix`)}>
+                          <option value="元">元</option>
+                          <option value="%">%</option>
+                        </select>
+                      </div>
+                    </div>
+                    <button type="button" onClick={() => removePerformance(index)} className="absolute top-1/2 -translate-y-1/2 right-3 text-danger hover:bg-danger/10 p-1 rounded">
                       <Trash2 className="size-4" />
                     </button>
                   </div>

@@ -2,6 +2,7 @@ import { X } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import axios from '@/utils/request';
 import { useRef } from 'react';
+import { showAlert } from '@/components/Alert';
 
 const AddCampus = ({ onSuccess }) => {
   const closeBtnRef = useRef(null);
@@ -10,12 +11,12 @@ const AddCampus = ({ onSuccess }) => {
   const onSubmit = async (data) => {
     try {
       await axios.post('/api/campuses', data);
-      reset(); // 重置表单
-      onSuccess(); // 刷新列表
-      // 关闭模态框 (模拟点击关闭按钮)
+      reset();
+      onSuccess();
       closeBtnRef.current?.click();
+      showAlert('添加成功', 'success');
     } catch (error) {
-      alert(error.response?.data?.message || '添加失败');
+      showAlert(error.response?.data?.message || '添加失败', 'warning');
     }
   };
 

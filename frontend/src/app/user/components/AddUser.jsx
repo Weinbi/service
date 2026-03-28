@@ -38,7 +38,7 @@ const AddUser = ({ onAddSuccess }) => {
       reset();
       closeBtnRef.current?.click();
     } catch (error) {
-      showAlert(error.response?.data?.message || error.message || '添加失败', 'danger');
+      showAlert(error.response?.data?.message || '添加失败', 'danger');
     }
   };
 

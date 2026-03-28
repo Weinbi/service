@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import axios from '@/utils/request';
 import deleteImg from '@/assets/images/delete.png';
 import { X } from 'lucide-react';
+import { showAlert } from '@/components/Alert';
 
 const DeleteModal = ({ course, onDeleteSuccess }) => {
   const closeBtnRef = useRef(null);
@@ -12,8 +13,9 @@ const DeleteModal = ({ course, onDeleteSuccess }) => {
       await axios.delete(`/api/courses/${course.id}`);
       onDeleteSuccess();
       closeBtnRef.current?.click();
+      showAlert('删除成功', 'success');
     } catch (error) {
-      alert('删除失败: ' + (error.response?.data?.message || error.message));
+      showAlert(error.response?.data?.message || '删除失败', 'warning');
     }
   };
 
