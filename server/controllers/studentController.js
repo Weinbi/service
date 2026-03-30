@@ -45,7 +45,7 @@ class StudentController {
       // 构造初次跟进记录，加入随机唯一 id 用于前端渲染列表
       const newRecords = [{
         id: crypto.randomBytes(4).toString('hex'), // 添加唯一标识符
-        created_at: new Date().toISOString(),
+        created_at: new Date().toLocaleString(),
         operator: consultant_name,
         content: initial_record || '新建学生线索'
       }];
@@ -128,7 +128,7 @@ class StudentController {
       // 构造新记录
       const newRecord = {
         id: crypto.randomBytes(4).toString('hex'), // 生成8位短ID
-        created_at: new Date().toISOString(),
+        created_at: new Date().toLocaleString(),
         operator: consultant_name,
         content
       };

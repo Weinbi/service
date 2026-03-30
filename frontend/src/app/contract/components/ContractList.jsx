@@ -37,9 +37,9 @@ const ContractList = ({ contracts, onSelectContract }) => {
                 <td className="px-4 py-3 text-sm">{item.course_name}</td>
                 <td className="px-4 py-3 text-sm">{item.purchased_hours}</td>
                 <td className="px-4 py-3 text-sm font-semibold">{item.total_due}</td>
-                <td className="px-4 py-3 text-sm">{new Date(item.contract_date).toLocaleDateString()}</td>
+                <td className="px-4 py-3 text-sm">{new Date(item.created_at).toLocaleString()}</td>
                 <td className="px-4 py-3 text-sm">
-                  <span className={`px-2 py-1 rounded-full text-xs ${item.status === '已签约' ? 'bg-success/10 text-success' : 'bg-default-200'}`}>
+                  <span className={`px-2 py-1 rounded-full text-xs ${item.status === '已收款' ? 'bg-success/10 text-success' : 'bg-default-200'}`}>
                     {item.status}
                   </span>
                 </td>

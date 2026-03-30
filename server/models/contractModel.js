@@ -18,9 +18,10 @@ class ContractModel {
 
     static async create(data, operator) {
         const {
-            student_id, course_id, purchased_hours, campus_id, contract_date,
+            student_id, course_id, purchased_hours, campus_id,
             remark, group_name, verify_code, discountInfo, groupInfo, peer_students,
-            selected_textbooks, calculatedTuition, textbookFee, total_due
+            selected_textbooks, calculatedTuition, textbookFee, total_due,
+            status, payment_method
         } = data;
 
         return await db.transaction(async (trx) => {
@@ -57,17 +58,22 @@ class ContractModel {
                 course_id, course_name: course.course_name, class_period: course.class_period, unit_price: course.unit_price
             };
 
+            // 判断账户余额写入逻辑
+            const account_balance = status === '已付款' ? total_due : 0;
+            
             // 2. 插入合同记录
             const [contractId] = await trx('contracts').insert({
                 student_id, course_id, purchased_hours, campus_id,
-                contract_date, remark, total_due,
+                remark, total_due,
                 consultant_id: operator.id,
                 student_snapshot: JSON.stringify({ name: student.name, parent_phone: student.parent_phone }),
                 course_snapshot: JSON.stringify(courseSnapshot),
                 textbook_info: JSON.stringify(textbooksSnapshot),
                 discount_info: JSON.stringify(discountInfo),
                 group_info: JSON.stringify(groupInfo),
-                status: '已签约'
+                status: status || '已签约', // 修改：使用前端传递的状态，缺省则为已签约
+                payment_method: payment_method || null,  // 新增：保存支付方式
+                account_balance: account_balance
             });
 
             // 3. 插入财务流水 (学费与教材费拆分)
@@ -76,7 +82,8 @@ class ContractModel {
                     serial_no: `TU${Date.now()}${Math.floor(Math.random() * 1000)}`,
                     campus_id, trade_type: '收入', category: '学费',
                     amount: calculatedTuition, contract_id: contractId,
-                    operator_id: operator.id, remark: remark
+                    operator_id: operator.id, remark: remark,
+                    payment_method: payment_method || null // 新增：保存支付方式到流水表
                 });
             }
             if (textbookFee > 0) {
@@ -84,7 +91,8 @@ class ContractModel {
                     serial_no: `TB${Date.now()}${Math.floor(Math.random() * 1000)}`,
                     campus_id, trade_type: '收入', category: '教材费',
                     amount: textbookFee, contract_id: contractId,
-                    operator_id: operator.id, remark: remark
+                    operator_id: operator.id, remark: remark,
+                    payment_method: payment_method || null // 新增：保存支付方式到流水表
                 });
             }
 
@@ -95,7 +103,7 @@ class ContractModel {
 
             stRecords.push({
                 id: crypto.randomBytes(4).toString('hex'),
-                created_at: new Date().toISOString(),
+                created_at: new Date().toLocaleString(),
                 content: `已签约 ${course.course_name} 课程 ${purchased_hours} 课时`,
                 operator: operator.real_name
             });

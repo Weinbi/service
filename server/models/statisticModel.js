@@ -20,7 +20,7 @@ class StatisticModel {
       .sum('total_due as total')
       .where({ consultant_id: user_id, campus_id: campus_id })
       .andWhere('status', '已签约')
-      .andWhereRaw("DATE_FORMAT(contract_date, '%Y-%m') = ?", [month])
+      .andWhereRaw("DATE_FORMAT(created_at, '%Y-%m') = ?", [month])
       .first();
 
     return result && result.total ? Number(result.total) : 0;

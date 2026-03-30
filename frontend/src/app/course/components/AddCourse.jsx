@@ -99,7 +99,8 @@ const AddCourse = ({ onAddSuccess }) => {
                   {errors.course_name && <span className="text-xs text-danger">{errors.course_name.message}</span>}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                {/* 修改为3列网格以容纳新字段 */}
+                <div className="grid grid-cols-3 gap-4">
                   <div>
                     <label className="block mb-2 text-sm font-medium">时长 (分钟) <span className="text-danger">*</span></label>
                     <input
@@ -111,11 +112,22 @@ const AddCourse = ({ onAddSuccess }) => {
                     {errors.class_period && <span className="text-xs text-danger">{errors.class_period.message}</span>}
                   </div>
                   <div>
+                    <label className="block mb-2 text-sm font-medium">每次培训课时 <span className="text-danger">*</span></label>
+                    <input
+                      type="number"
+                      step="1"
+                      placeholder="如: 1 或 2"
+                      className="form-input w-full border rounded p-2 text-sm"
+                      {...register("session_unit", { required: "需填课时", valueAsNumber: true, min: 1 })}
+                    />
+                    {errors.session_unit && <span className="text-xs text-danger">{errors.session_unit.message}</span>}
+                  </div>
+                  <div>
                     <label className="block mb-2 text-sm font-medium">标准单价 (元) <span className="text-danger">*</span></label>
                     <input
                       type="number"
                       step="0.01"
-                      placeholder="如: 120"
+                      placeholder="如: 80"
                       className="form-input w-full border rounded p-2 text-sm"
                       {...register("unit_price", { required: "需填单价", valueAsNumber: true, min: 0 })}
                     />

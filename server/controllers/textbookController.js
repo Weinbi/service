@@ -22,7 +22,7 @@ class TextbookController {
                 real_name: user.real_name,
                 type: '入库',
                 quantity: Number(stock),
-                created_at: new Date().toISOString()
+                created_at: new Date().toLocaleString()
             }];
 
             await TextbookModel.create({

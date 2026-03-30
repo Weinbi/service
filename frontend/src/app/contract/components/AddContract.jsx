@@ -18,7 +18,7 @@ const AddContract = ({ onAddSuccess }) => {
     defaultValues: {
       selected_textbooks: {},
       group_name: '',
-      contract_date: [new Date()] // 默认今天
+      status: '已签约'
     }
   });
 
@@ -27,6 +27,7 @@ const AddContract = ({ onAddSuccess }) => {
   const watchHours = watch("purchased_hours");
   const watchGroupName = watch("group_name");
   const watchTextbooks = watch("selected_textbooks");
+  const watchStatus = watch("status");
 
   // 初始化基础数据
   useEffect(() => {
@@ -111,14 +112,14 @@ const AddContract = ({ onAddSuccess }) => {
       discountInfo: preview.discountInfo,
       groupInfo: preview.groupInfo,
       peer_students: peerStudents,
-      contract_date: data.contract_date[0].toISOString().split('T')[0],
       selected_textbooks: selectedTbs,
       calculatedTuition: feeInfo.tuition,
       textbookFee: feeInfo.textbookFee,
-      total_due: feeInfo.total
+      total_due: feeInfo.total,
+      payment_method: data.status === '已收款' ? data.payment_method : null
     };
     delete payload.peer_student;
-    
+
     try {
       await axios.post('/api/contracts', payload);
       onAddSuccess();
@@ -303,18 +304,36 @@ const AddContract = ({ onAddSuccess }) => {
               </div>
             )}
 
+            {/* 新增：合同状态 与 支付方式 */}
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <label className="block mb-1 text-sm font-medium">合同状态 *</label>
+                <select className="form-input w-full border rounded p-2 text-sm" {...register("status", { required: "必选" })}>
+                  <option value="已签约">已签约</option>
+                  <option value="已收款">已收款</option>
+                </select>
+                {errors.status && <span className="text-xs text-danger">{errors.status.message}</span>}
+              </div>
+
+              {/* 仅在选择已收款时显示 */}
+              {watchStatus === '已收款' && (
+                <div>
+                  <label className="block mb-1 text-sm font-medium">支付方式(交易单号)</label>
+                  <input
+                    type="text"
+                    placeholder="如：微信、支付宝、银行转账"
+                    className="form-input w-full border rounded p-2 text-sm"
+                    {...register("payment_method", { required: "已收款状态下必填支付方式" })}
+                  />
+                  {errors.payment_method && <span className="text-xs text-danger">{errors.payment_method.message}</span>}
+                </div>
+              )}
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block mb-1 text-sm font-medium">签约日期 *</label>
-                <Controller
-                  name="contract_date" control={control} rules={{ required: "请选择签约日期" }}
-                  render={({ field }) => <Flatpickr className="form-input w-full border rounded p-2 text-sm" options={{ dateFormat: "Y-m-d", locale: Mandarin }} value={field.value} onChange={field.onChange} />}
-                />
-                {errors.contract_date && <span className="text-xs text-danger">{errors.contract_date.message}</span>}
-              </div>
-              <div>
-                <label className="block mb-1 text-sm font-medium">备注 (收款方式、交易单号等)</label>
-                <input type="text" className="form-input w-full border rounded p-2 text-sm" {...register("remark", { required: "必填" })} />
+                <label className="block mb-1 text-sm font-medium">备注</label>
+                <input type="text" className="form-input w-full border rounded p-2 text-sm" {...register("remark")} />
                 {errors.remark && <span className="text-xs text-danger">{errors.remark.message}</span>}
               </div>
             </div>

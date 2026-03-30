@@ -65,7 +65,8 @@ CREATE TABLE courses (
     id INT PRIMARY KEY AUTO_INCREMENT,
     course_name VARCHAR(100) UNIQUE,
     class_period INT, -- 每节课时长（分钟）
-    unit_price DECIMAL(10, 2), -- 标准单价
+    session_unit INT, -- 每次培训课时
+    unit_price DECIMAL(10, 2), -- 课时单价
     textbook_config JSON, -- 教材配置：[{"textbook_id": 101}]
     discount_scheme JSON, -- 折扣方案：[{"name": "...", "value": 0, "suffix": "元\%", "condition": { "end_date": "2026-03-01", "min_hours": 40, "student_status": "新线索" }}]
     group_scheme JSON, -- 团购方案：[{"name": "线上团购\线下团购", "value": 0, "suffix": "元\%"}]
@@ -104,9 +105,8 @@ CREATE TABLE contracts (
     total_due DECIMAL(10, 2), -- 实付金额
     consultant_id INT, -- 所属课程顾问ID
     campus_id INT,
-    contract_date DATE,
     remark TEXT,
-    account_blance DECIMAL(10, 2) DEFAULT 0.00, -- 账户余额
+    account_balance DECIMAL(10, 2) DEFAULT 0.00, -- 账户余额
     status VARCHAR(50) DEFAULT '已签约', -- 合同状态: 已签约、已收款、已退费
     payment_method VARCHAR(200), -- 支付方式
     refund_id INT,

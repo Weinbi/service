@@ -14,6 +14,7 @@ class CourseModel {
     const {
       course_name,
       class_period,
+      session_unit,
       unit_price,
       textbook_config = [],
       discount_scheme = [],
@@ -25,6 +26,7 @@ class CourseModel {
     const [insertId] = await db('courses').insert({
       course_name,
       class_period,
+      session_unit,
       unit_price,
       textbook_config: JSON.stringify(textbook_config),
       discount_scheme: JSON.stringify(discount_scheme),
@@ -40,6 +42,7 @@ class CourseModel {
     const {
       course_name,
       class_period,
+      session_unit,
       unit_price,
       textbook_config = [],
       discount_scheme = [],
@@ -53,6 +56,7 @@ class CourseModel {
       .update({
         course_name,
         class_period,
+        session_unit,
         unit_price,
         textbook_config: JSON.stringify(textbook_config),
         discount_scheme: JSON.stringify(discount_scheme),
