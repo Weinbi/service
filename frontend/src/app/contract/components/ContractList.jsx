@@ -1,4 +1,4 @@
-import { Plus, Trash2, Eye} from 'lucide-react';
+import { Plus, Trash2, Eye, BadgeCheck} from 'lucide-react';
 
 const ContractList = ({ contracts, onSelectContract }) => {
   return (
@@ -24,6 +24,7 @@ const ContractList = ({ contracts, onSelectContract }) => {
               <th className="px-4 py-3 font-medium text-start">报读课程</th>
               <th className="px-4 py-3 font-medium text-start">课时数</th>
               <th className="px-4 py-3 font-medium text-start">实付金额(￥)</th>
+              <th className="px-4 py-3 font-medium text-start">合同余额(￥)</th>
               <th className="px-4 py-3 font-medium text-start">签约日期</th>
               <th className="px-4 py-3 font-medium text-start">状态</th>
               <th className="px-4 py-3 font-medium text-start">操作</th>
@@ -37,6 +38,7 @@ const ContractList = ({ contracts, onSelectContract }) => {
                 <td className="px-4 py-3 text-sm">{item.course_name}</td>
                 <td className="px-4 py-3 text-sm">{item.purchased_hours}</td>
                 <td className="px-4 py-3 text-sm font-semibold">{item.total_due}</td>
+                <td className="px-4 py-3 text-sm font-semibold">{item.account_balance}</td>
                 <td className="px-4 py-3 text-sm">{new Date(item.created_at).toLocaleString()}</td>
                 <td className="px-4 py-3 text-sm">
                   <span className={`px-2 py-1 rounded-full text-xs ${item.status === '已收款' ? 'bg-success/10 text-success' : 'bg-default-200'}`}>
@@ -45,12 +47,22 @@ const ContractList = ({ contracts, onSelectContract }) => {
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <button className="flex size-8 bg-default-200 rounded-md items-center justify-center hover:bg-info/10 hover:text-info text-default-600" onClick={() => onSelectContract(item)} data-hs-overlay="#contract-detail-modal">
-                      <Eye className="size-4" />
-                    </button>
-                    <button className="flex size-8 bg-default-200 rounded-md items-center justify-center hover:bg-danger/10 hover:text-danger text-default-600" onClick={() => onSelectContract(item)} data-hs-overlay="#contract-delete-modal">
-                      <Trash2 className="size-4" />
-                    </button>
+                    {/* 根据状态条件渲染操作按钮 */}
+                    {item.status === '已签约' && (
+                      <>
+                        <button className="flex size-8 bg-default-200 rounded-md items-center justify-center hover:bg-success/10 hover:text-success text-default-600" onClick={() => onSelectContract(item)} data-hs-overlay="#contract-payment-modal" title="确认收款">
+                          <BadgeCheck className="size-4" />
+                        </button>
+                        <button className="flex size-8 bg-default-200 rounded-md items-center justify-center hover:bg-danger/10 hover:text-danger text-default-600" onClick={() => onSelectContract(item)} data-hs-overlay="#contract-delete-modal" title="删除">
+                          <Trash2 className="size-4" />
+                        </button>
+                      </>
+                    )}
+                    {(item.status === '已收款' || item.status === '已退费') && (
+                      <button className="flex size-8 bg-default-200 rounded-md items-center justify-center hover:bg-info/10 hover:text-info text-default-600" onClick={() => onSelectContract(item)} data-hs-overlay="#contract-detail-modal" title="详情">
+                        <Eye className="size-4" />
+                      </button>
+                    )}
                   </div>
                 </td>
               </tr>

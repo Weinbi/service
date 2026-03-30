@@ -5,6 +5,7 @@ import ContractList from './components/ContractList';
 import AddContract from './components/AddContract';
 import DeleteModal from './components/DeleteModal';
 import ContractDetail from './components/ContractDetail';
+import PaymentConfirm from './components/PaymentConfirm';
 
 const Index = () => {
   const [contracts, setContracts] = useState([]);
@@ -33,6 +34,7 @@ const Index = () => {
       <AddContract onAddSuccess={fetchContracts} />
       <DeleteModal contract={selectedContract} onDeleteSuccess={fetchContracts} />
       <ContractDetail contract={selectedContract} />
+      <PaymentConfirm contract={selectedContract} onSuccess={fetchContracts} />
     </>
   );
 };

@@ -57,7 +57,7 @@ class ContractController {
                 // 修改点：同样修正团购 % 的折扣计算。
                 let gAmount = selectedGroup.suffix === '%' ? (discountedPrice * ((100 - selectedGroup.value) / 100)) : selectedGroup.value;
                 discountedPrice -= gAmount;
-                groupInfo.push({ name: selectedGroup.name, amount: Number(gAmount.toFixed(2)) ,value: selectedGroup.value, suffix: selectedGroup.suffix });
+                groupInfo.push({ name: selectedGroup.name, amount: Number(gAmount.toFixed(2)), value: selectedGroup.value, suffix: selectedGroup.suffix });
             }
 
             // 4. 提取教材数据
@@ -88,6 +88,24 @@ class ContractController {
         } catch (error) {
             ctx.status = 400;
             ctx.body = { code: 400, message: error.message };
+        }
+    }
+
+    static async confirmPayment(ctx) {
+        try {
+            const { id } = ctx.params;
+            const contract = await db('contracts').where({ id }).first();
+
+            if (!contract) {
+                ctx.status = 404;
+                return ctx.body = { message: '合同不存在' };
+            }
+
+            await ContractModel.confirmPayment(id, contract.total_due);
+            ctx.body = { code: 200, message: '收款确认成功' };
+        } catch (error) {
+            ctx.status = 500;
+            ctx.body = { message: '收款确认失败', error: error.message };
         }
     }
 

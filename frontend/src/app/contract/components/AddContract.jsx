@@ -3,8 +3,6 @@ import axios from '@/utils/request';
 import { X } from 'lucide-react';
 import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
-import Flatpickr from 'react-flatpickr';
-import { Mandarin } from 'flatpickr/dist/l10n/zh.js'
 import { showAlert } from '@/components/Alert';
 
 const AddContract = ({ onAddSuccess }) => {

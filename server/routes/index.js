@@ -85,6 +85,7 @@ router.get('/api/contracts', authMiddleware, ContractController.list);
 router.post('/api/contracts/preview', authMiddleware, ContractController.preview);
 router.post('/api/contracts', authMiddleware, ContractController.add);
 router.put('/api/contracts/:id', authMiddleware, ContractController.update);
+router.put('/api/contracts/:id/payment', authMiddleware, ContractController.confirmPayment);
 router.delete('/api/contracts/:id', authMiddleware, ContractController.remove);
 
 // 财务流水路由

@@ -111,6 +111,7 @@ CREATE TABLE contracts (
     payment_method VARCHAR(200), -- 支付方式
     refund_id INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE RESTRICT
 );
 

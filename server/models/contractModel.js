@@ -117,6 +117,13 @@ class ContractModel {
         });
     }
 
+    static async confirmPayment(id, total_due) {
+        return await db('contracts').where({ id }).update({
+            status: '已收款',
+            account_balance: total_due
+        });
+    }
+
     static async update(id, data) {
         return await db('contracts').where({ id }).update(data);
     }
