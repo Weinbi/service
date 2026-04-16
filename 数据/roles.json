@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "role_name": "管理员",
+    "role_description": "所有权限",
+    "permissions": "[\"enroll:manage\", \"teaching:manage\", \"academic:manage\", \"user:manage\", \"finance:manage\"]",
+    "salary_scheme": "[{\"name\": \"月薪\", \"type\": \"基本工资\", \"value\": \"6500\", \"suffix\": \"元\", \"reference_code\": \"null\"}]",
+    "tax_scheme": "[{\"name\": \"养老保险\", \"type\": \"法定代扣代缴\", \"value\": 8, \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}, {\"name\": \"医疗保险\", \"type\": \"法定代扣代缴\", \"value\": 2, \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}, {\"name\": \"失业保险\", \"type\": \"法定代扣代缴\", \"value\": 0.5, \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}, {\"name\": \"住房公积金\", \"type\": \"法定代扣代缴\", \"value\": 5, \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}]",
+    "created_at": "19/3/2026 15:23:42",
+    "updated_at": "19/3/2026 15:30:39"
+  },
+  {
+    "id": 2,
+    "role_name": "课程顾问",
+    "role_description": "招生与教务",
+    "permissions": "[\"enroll:manage\", \"academic:manage\"]",
+    "salary_scheme": "[{\"name\": \"月薪\", \"type\": \"基本工资\", \"value\": \"3000\", \"suffix\": \"元\", \"reference_code\": \"null\"}]",
+    "tax_scheme": "[{\"name\": \"养老保险\", \"type\": \"法定代扣代缴\", \"value\": \"8\", \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}, {\"name\": \"医疗保险\", \"type\": \"法定代扣代缴\", \"value\": 2, \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}, {\"name\": \"失业保险\", \"type\": \"法定代扣代缴\", \"value\": 0.5, \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}]",
+    "created_at": "19/3/2026 15:23:42",
+    "updated_at": "19/3/2026 15:30:02"
+  },
+  {
+    "id": 3,
+    "role_name": "英语教师",
+    "role_description": "教学",
+    "permissions": "[\"teaching:manage\"]",
+    "salary_scheme": "[{\"name\": \"月薪\", \"type\": \"基本工资\", \"value\": \"3500\", \"suffix\": \"元\", \"reference_code\": \"null\"}]",
+    "tax_scheme": "[{\"name\": \"养老保险\", \"type\": \"法定代扣代缴\", \"value\": 8, \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}, {\"name\": \"医疗保险\", \"type\": \"法定代扣代缴\", \"value\": 2, \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}, {\"name\": \"失业保险\", \"type\": \"法定代扣代缴\", \"value\": 0.5, \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}]",
+    "created_at": "19/3/2026 15:23:42",
+    "updated_at": "19/3/2026 15:32:47"
+  },
+  {
+    "id": 4,
+    "role_name": "数学教师",
+    "role_description": "教学",
+    "permissions": "[\"teaching:manage\"]",
+    "salary_scheme": "[{\"name\": \"月薪\", \"type\": \"基本工资\", \"value\": \"3500\", \"suffix\": \"元\", \"reference_code\": \"null\"}]",
+    "tax_scheme": "[{\"name\": \"养老保险\", \"type\": \"法定代扣代缴\", \"value\": 8, \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}, {\"name\": \"医疗保险\", \"type\": \"法定代扣代缴\", \"value\": 2, \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}, {\"name\": \"失业保险\", \"type\": \"法定代扣代缴\", \"value\": 0.5, \"suffix\": \"%\", \"reference_code\": \"gross_salary\"}]",
+    "created_at": "19/3/2026 15:23:42",
+    "updated_at": "19/3/2026 15:33:28"
+  }
+]

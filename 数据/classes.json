@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "course_id": 1,
+    "campus_id": 2,
+    "teacher_id": 5,
+    "class_name": "I Wonder 1班",
+    "max_capacity": 20,
+    "current_count": 0,
+    "status": "开课中"
+  },
+  {
+    "id": 2,
+    "course_id": 2,
+    "campus_id": 1,
+    "teacher_id": 4,
+    "class_name": "七年级数学极智班",
+    "max_capacity": 20,
+    "current_count": 0,
+    "status": "开课中"
+  }
+]

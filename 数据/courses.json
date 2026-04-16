@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "course_name": "少儿英语",
+    "class_period": 45,
+    "unit_price": 80.0,
+    "textbook_config": "[{\"textbook_id\": 1}, {\"textbook_id\": 2}]",
+    "discount_scheme": "[{\"name\": \"新生优惠\", \"value\": 90, \"suffix\": \"%\", \"condition\": {\"end_date\": \"2026-05-26\", \"min_hours\": 35, \"student_status\": \"已试听\"}}]",
+    "group_scheme": "[{\"name\": \"线下团购\", \"value\": 50, \"suffix\": \"元\"}]",
+    "performance_scheme": "[{\"type\": \"新生成交\", \"value\": 10, \"suffix\": \"%\", \"role_name\": \"课程顾问\"}, {\"type\": \"课时消耗\", \"value\": 10, \"suffix\": \"元\", \"role_name\": \"教师\"}]",
+    "refund_scheme": "[{\"name\": \"转账手续费\", \"value\": 0.1, \"suffix\": \"%\", \"reference_code\": \"contract_balance\"}]",
+    "created_at": "26/3/2026 10:33:33",
+    "updated_at": "27/3/2026 11:09:46"
+  },
+  {
+    "id": 2,
+    "course_name": "初中数学",
+    "class_period": 120,
+    "unit_price": 120.0,
+    "textbook_config": "[{\"textbook_id\": 3}]",
+    "discount_scheme": "[{\"name\": \"老生续费\", \"value\": 80, \"suffix\": \"%\", \"condition\": {\"end_date\": \"2026-05-26\", \"min_hours\": 30, \"student_status\": \"已转化\"}}]",
+    "group_scheme": "[{\"name\": \"线上团购\", \"value\": 10, \"suffix\": \"元\"}]",
+    "performance_scheme": "[{\"name\": \"\", \"type\": \"课时消耗\", \"value\": 10, \"suffix\": \"元\", \"role_name\": \"教师\"}, {\"name\": \"\", \"type\": \"新生成交\", \"value\": 10, \"suffix\": \"%\", \"role_name\": \"课程顾问\"}]",
+    "refund_scheme": "[{\"name\": \"转账手续费\", \"value\": 0.1, \"suffix\": \"%\", \"reference_code\": \"contract_balance\"}]",
+    "created_at": "26/3/2026 10:35:24",
+    "updated_at": "27/3/2026 11:10:06"
+  }
+]
