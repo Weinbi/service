@@ -60,7 +60,7 @@ const StudentDetails = ({ student, refreshTrigger }) => {
                   </div>
                   <div>
                     <span className="font-medium">创建时间：</span> 
-                    {details?.created_at ? new Date(details.created_at).toLocaleString('zh-CN') : '-'}
+                    {details?.created_at ? new Date(details.created_at).toLocaleString() : '-'}
                   </div>
                 </div>
               </div>
@@ -85,7 +85,7 @@ const StudentDetails = ({ student, refreshTrigger }) => {
                         <span className="absolute -start-[25px] flex items-center justify-center size-4 bg-primary text-white rounded-full ring-4 ring-white"></span>
                         <div className="flex flex-col">
                           <span className="text-sm font-medium text-default-500">
-                            {new Date(record.created_at).toLocaleString('zh-CN')} · <span className="text-primary">{record.operator}</span>
+                            {new Date(record.created_at).toLocaleString()} · <span className="text-primary">{record.operator}</span>
                           </span>
                           <p className="mt-1.5 text-sm text-default-800 bg-default-50 p-3 rounded-lg border border-default-100 inline-block">
                             {record.content}

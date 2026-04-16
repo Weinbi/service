@@ -27,8 +27,7 @@ class FinancialRecordController {
         category,
         amount,
         remark,
-        operator_id,
-        transaction_date: new Date()
+        operator_id
       };
 
       const id = await FinancialRecordModel.create(newRecord);

@@ -11,6 +11,7 @@ const Textbook = lazy(() => import('@/app/textbook'));
 const Course = lazy(() => import('@/app/course'));
 const Class = lazy(() => import('@/app/class'));
 const Contract = lazy(() => import('@/app/contract'));
+const FinancialRecord = lazy(() => import('@/app/financial-record'));
 
 //auth
 const BasicLogin = lazy(() => import('@/app/basic-login'));
@@ -51,6 +52,10 @@ export const layoutsRoutes = [{
 }, {
   path: '/contract',
   element: <Contract />
+}, {
+  path: '/financial-record',
+  name: 'FinancialRecord',
+  element: <FinancialRecord />
 }];
 
 export const singlePageRoutes = [{

@@ -73,7 +73,7 @@ const ContractDetail = ({ contract }) => {
                   <h2 className="text-3xl font-bold tracking-[0.3em] text-gray-800">收款凭证</h2>
                   <div className="flex justify-between mt-6 text-sm text-gray-600 font-medium">
                     <span>流水单号：{contract.id}</span>
-                    <span>创建时间：{contract.created_at ? new Date(contract.created_at).toLocaleString('zh-CN') : '-'}</span>
+                    <span>创建时间：{contract.created_at ? new Date(contract.created_at).toLocaleString() : '-'}</span>
                   </div>
                 </div>
 

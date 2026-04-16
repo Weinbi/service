@@ -11,7 +11,7 @@ class FinancialRecordModel {
         'campuses.name as campus_name', 
         'users.real_name as operator_name'
       )
-      .orderBy('transaction_date', 'desc');
+      .orderBy('created_at', 'desc');
   }
 
   // 插入新的财务记录
